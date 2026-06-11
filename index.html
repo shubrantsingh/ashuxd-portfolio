@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AshuxD — Video Editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;
+  --surface:#111111;
+  --surface2:#1a1a1a;
+  --border:#222222;
+  --border2:#333333;
+  --text:#ffffff;
+  --text2:#aaaaaa;
+  --text3:#555555;
+  --accent:#7c3aed;
+  --accent2:#9333ea;
+  --yellow:#c4b5fd;
+  --font-display:'Bebas Neue',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --radius:8px;
+  --radius-lg:14px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* NOISE TEXTURE */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.4}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+nav::before{content:'';position:absolute;inset:0;background:rgba(10,10,10,0.9);backdrop-filter:blur(16px);z-index:-1}
+.nav-logo{font-family:var(--font-display);font-size:28px;letter-spacing:2px;color:var(--text);text-decoration:none;line-height:1}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;letter-spacing:1.5px;text-transform:uppercase;transition:color 0.2s}
+.nav-links a:hover{color:var(--accent)}
+.nav-cta{background:var(--accent);color:#fff;border:none;padding:10px 22px;border-radius:var(--radius);font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;letter-spacing:1px;text-transform:uppercase;transition:background 0.2s}
+.nav-cta:hover{background:var(--accent2)}
+
+/* HERO */
+.hero{min-height:100vh;padding:100px 5% 60px;display:flex;align-items:center;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.hero-bg-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:clamp(120px,22vw,320px);color:rgba(255,255,255,0.015);white-space:nowrap;user-select:none;pointer-events:none;letter-spacing:8px}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+.hero-eyebrow::before{content:'';width:24px;height:2px;background:var(--accent);display:inline-block}
+.hero h1{font-family:var(--font-display);font-size:clamp(72px,12vw,160px);line-height:0.92;letter-spacing:2px;color:var(--text);margin-bottom:8px}
+.hero h1 .outline{-webkit-text-stroke:2px var(--text);color:transparent}
+.hero h1 .yellow{color:var(--yellow)}
+.hero-sub{font-size:16px;color:var(--text2);line-height:1.7;max-width:480px;margin:28px 0 40px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.btn-primary{background:var(--accent);color:#fff;padding:14px 30px;border-radius:var(--radius);font-size:13px;font-weight:600;text-decoration:none;letter-spacing:1px;text-transform:uppercase;transition:background 0.2s,transform 0.15s;display:inline-block}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--text);padding:14px 30px;border-radius:var(--radius);font-size:13px;font-weight:600;text-decoration:none;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--border2);transition:border-color 0.2s,color 0.2s;display:inline-block}
+.btn-ghost:hover{border-color:var(--text2);color:var(--text)}
+.hero-stats{display:flex;gap:48px;margin-top:64px;padding-top:40px;border-top:1px solid var(--border)}
+.hero-stat-num{font-family:var(--font-display);font-size:48px;color:var(--text);letter-spacing:1px;line-height:1}
+.hero-stat-num span{color:var(--accent)}
+.hero-stat-label{font-size:11px;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px}
+.hero-accent-line{position:absolute;top:0;right:0;width:1px;height:100%;background:linear-gradient(to bottom,transparent,var(--accent),transparent);opacity:0.3}
+
+/* MARQUEE */
+.marquee-section{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:16px 0;overflow:hidden;background:var(--accent)}
+.marquee-track{display:flex;gap:0;animation:marquee 18s linear infinite;width:max-content}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.marquee-item{font-family:var(--font-display);font-size:20px;letter-spacing:3px;color:#fff;padding:0 28px;white-space:nowrap}
+.marquee-dot{color:rgba(255,255,255,0.5)}
+
+/* SERVICES */
+#services{padding:100px 5%;border-bottom:1px solid var(--border)}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.section-title{font-family:var(--font-display);font-size:clamp(40px,6vw,72px);color:var(--text);letter-spacing:2px;line-height:1;margin-bottom:48px}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--border)}
+.service-card{background:var(--bg);padding:32px 28px;transition:background 0.2s}
+.service-card:hover{background:var(--surface)}
+.service-num{font-family:var(--font-display);font-size:48px;color:var(--border2);line-height:1;margin-bottom:20px;transition:color 0.2s}
+.service-card:hover .service-num{color:var(--accent)}
+.service-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:10px;letter-spacing:0.3px}
+.service-desc{font-size:13px;color:var(--text2);line-height:1.65}
+
+/* THUMBNAILS */
+#thumbnails{padding:100px 5%;border-bottom:1px solid var(--border);background:var(--bg)}
+.thumb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.thumb-item{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface);transition:transform 0.2s,border-color 0.2s;cursor:pointer}
+.thumb-item:hover{transform:translateY(-4px);border-color:var(--accent)}
+.thumb-img{aspect-ratio:16/9;width:100%;display:flex;align-items:flex-end;position:relative;overflow:hidden}
+.thumb-img-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);padding:24px 14px 12px;font-size:13px;color:#fff;font-weight:600}
+.thumb-meta{padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
+.thumb-tag{font-size:11px;font-weight:600;color:var(--accent);background:rgba(124,58,237,0.15);padding:4px 10px;border-radius:100px;letter-spacing:0.8px;text-transform:uppercase}
+.thumb-add-btn{width:100%;padding:20px;border:1px dashed var(--border2);border-radius:var(--radius-lg);background:transparent;cursor:pointer;font-size:13px;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:8px;transition:border-color 0.2s,color 0.2s;font-family:var(--font-body);letter-spacing:0.5px}
+.thumb-add-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* VIDEOS */
+#videos{padding:100px 5%;border-bottom:1px solid var(--border);background:var(--surface)}
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.video-card{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--bg);transition:transform 0.2s,border-color 0.2s}
+.video-card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.video-thumb{aspect-ratio:16/9;background:#0d0d0d;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.video-play{width:56px;height:56px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform 0.2s,background 0.2s}
+.video-card:hover .video-play{transform:scale(1.12);background:var(--accent2)}
+.play-tri{width:0;height:0;border-style:solid;border-width:9px 0 9px 16px;border-color:transparent transparent transparent #fff;margin-left:4px}
+.video-duration{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,0.8);color:#fff;font-size:11px;padding:3px 7px;border-radius:4px;font-weight:600}
+.video-info{padding:16px}
+.video-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.4}
+.video-meta{font-size:12px;color:var(--text3);display:flex;gap:12px}
+.video-add-btn{width:100%;padding:24px;border:1px dashed var(--border2);border-radius:var(--radius-lg);background:transparent;cursor:pointer;font-size:13px;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:8px;transition:border-color 0.2s,color 0.2s;font-family:var(--font-body)}
+.video-add-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ABOUT */
+#about{padding:100px 5%;border-bottom:1px solid var(--border);background:var(--bg)}
+.about-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:80px;align-items:start;max-width:1100px;margin:0 auto}
+.about-left{position:relative}
+.about-avatar-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:120px;color:var(--border2);position:relative;overflow:hidden}
+.about-avatar-box::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(to top,rgba(124,58,237,0.15),transparent)}
+.about-accent-badge{position:absolute;bottom:-12px;right:-12px;background:var(--accent);color:#fff;padding:10px 18px;border-radius:var(--radius);font-family:var(--font-display);font-size:18px;letter-spacing:1px;white-space:nowrap}
+.about-content .section-label{margin-top:0}
+.about-content h2{font-family:var(--font-display);font-size:clamp(32px,5vw,56px);color:var(--text);letter-spacing:1px;line-height:1.05;margin-bottom:20px}
+.about-content p{font-size:15px;color:var(--text2);line-height:1.75;margin-bottom:14px}
+.tools-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.tool-tag{font-size:11px;font-weight:600;color:var(--text2);background:var(--surface);border:1px solid var(--border2);padding:6px 14px;border-radius:100px;letter-spacing:0.8px;text-transform:uppercase;transition:border-color 0.2s,color 0.2s}
+.tool-tag:hover{border-color:var(--accent);color:var(--accent)}
+
+/* CONTACT */
+#contact{padding:100px 5%;background:var(--surface)}
+.contact-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.contact-left h2{font-family:var(--font-display);font-size:clamp(36px,6vw,72px);color:var(--text);letter-spacing:2px;line-height:1;margin-bottom:20px}
+.contact-left h2 span{color:var(--accent)}
+.contact-left p{font-size:15px;color:var(--text2);line-height:1.7;max-width:400px}
+.contact-socials{display:flex;gap:10px;margin-top:32px}
+.social-link{padding:10px 18px;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius);text-decoration:none;color:var(--text2);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;transition:border-color 0.2s,color 0.2s}
+.social-link:hover{border-color:var(--accent);color:var(--accent)}
+.contact-form{display:flex;flex-direction:column;gap:12px}
+.contact-form input,.contact-form textarea{width:100%;padding:14px 18px;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color 0.2s;resize:none}
+.contact-form input::placeholder,.contact-form textarea::placeholder{color:var(--text3)}
+.contact-form input:focus,.contact-form textarea:focus{border-color:var(--accent)}
+.contact-form textarea{height:130px}
+.form-submit{background:var(--accent);color:#fff;padding:15px 28px;border:none;border-radius:var(--radius);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-body);letter-spacing:1.5px;text-transform:uppercase;transition:background 0.2s,transform 0.15s;align-self:flex-start}
+.form-submit:hover{background:var(--accent2);transform:translateY(-2px)}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text3);letter-spacing:0.5px}
+.footer-logo{font-family:var(--font-display);font-size:22px;letter-spacing:2px;color:var(--text3)}
+.footer-logo span{color:var(--accent)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border2);width:100%;max-width:580px;overflow:hidden}
+.modal-header{padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.modal-title{font-family:var(--font-display);font-size:22px;letter-spacing:1px;color:var(--text)}
+.modal-close{width:30px;height:30px;background:var(--bg);border:1px solid var(--border2);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text2);line-height:1;transition:border-color 0.2s}
+.modal-close:hover{border-color:var(--accent);color:var(--accent)}
+.modal-body{padding:22px}
+.modal-preview{width:100%;aspect-ratio:16/9;background:var(--bg);border-radius:var(--radius);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--text3);margin-bottom:16px;overflow:hidden}
+.modal-preview img{width:100%;height:100%;object-fit:cover}
+.modal-input-group{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.modal-label{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:1px;text-transform:uppercase}
+.modal-input{width:100%;padding:11px 14px;border:1px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color 0.2s}
+.modal-input:focus{border-color:var(--accent)}
+.modal-input[type="file"]{padding:9px 14px;cursor:pointer}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:4px}
+.modal-btn-cancel{padding:10px 20px;border:1px solid var(--border2);border-radius:var(--radius);background:transparent;cursor:pointer;font-size:12px;color:var(--text2);font-family:var(--font-body);letter-spacing:0.5px;transition:border-color 0.2s}
+.modal-btn-cancel:hover{border-color:var(--text2)}
+.modal-btn-save{padding:10px 20px;border:none;border-radius:var(--radius);background:var(--accent);color:#fff;cursor:pointer;font-size:12px;font-weight:700;font-family:var(--font-body);letter-spacing:1px;text-transform:uppercase;transition:background 0.2s}
+.modal-btn-save:hover{background:var(--accent2)}
+
+/* HAMBURGER */
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px}
+.nav-mobile{display:none}
+
+@media(max-width:900px){
+  .nav-links,.nav-cta{display:none}
+  .nav-hamburger{display:flex}
+  .nav-mobile.open{display:flex;flex-direction:column;position:fixed;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);z-index:99;padding:12px 5%}
+  .nav-mobile a{padding:14px 0;font-size:14px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+  .nav-mobile a:last-child{border-bottom:none}
+  .hero h1{font-size:clamp(64px,15vw,120px)}
+  .hero-stats{gap:28px;flex-wrap:wrap}
+  .about-grid,.contact-inner{grid-template-columns:1fr;gap:40px}
+  .about-avatar-box{max-height:280px}
+  .about-accent-badge{right:0;bottom:-10px}
+  .thumb-grid,.video-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">ASHU<span>XD</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#thumbnails">Thumbnails</a></li>
+    <li><a href="#videos">Videos</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Hire me</a>
+  <button class="nav-hamburger" onclick="document.querySelector('.nav-mobile').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-mobile">
+  <a href="#services">Services</a>
+  <a href="#thumbnails">Thumbnails</a>
+  <a href="#videos">Videos</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-text">ASHUXD</div>
+  <div class="hero-accent-line"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Available for work</div>
+    <h1>
+      VIDEO<br>
+      <span class="outline">EDITOR</span><br>
+      <span class="yellow">ASHUXD</span>
+    </h1>
+    <p class="hero-sub">YouTube & short-form specialist. I edit content that hooks, holds, and converts — fast turnaround, high energy, zero compromise.</p>
+    <div class="hero-btns">
+      <a href="#videos" class="btn-primary">See my work →</a>
+      <a href="#contact" class="btn-ghost">Get a quote</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">50<span>+</span></div>
+        <div class="hero-stat-label">Projects done</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">4<span>K</span></div>
+        <div class="hero-stat-label">Export quality</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">48<span>H</span></div>
+        <div class="hero-stat-label">Turnaround</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">100<span>%</span></div>
+        <div class="hero-stat-label">Satisfaction</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">VIDEO EDITING</span><span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">REELS & SHORTS</span><span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">THUMBNAIL DESIGN</span><span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">YOUTUBE CONTENT</span><span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">COLOR GRADING</span><span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">FAST DELIVERY</span><span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">VIDEO EDITING</span><span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">REELS & SHORTS</span><span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">THUMBNAIL DESIGN</span><span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">YOUTUBE CONTENT</span><span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">COLOR GRADING</span><span class="marquee-item marquee-dot">·</span>
+    <span class="marquee-item">FAST DELIVERY</span><span class="marquee-item marquee-dot">·</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-inner">
+    <div class="section-label">What I do</div>
+    <div class="section-title">SERVICES</div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-num">01</div>
+        <div class="service-title">YouTube Video Editing</div>
+        <div class="service-desc">Full edits for YouTube — cuts, transitions, color grade, captions, sound design, and final export. Ready to upload.</div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">02</div>
+        <div class="service-title">Reels & Shorts</div>
+        <div class="service-desc">Short-form content built to stop the scroll. Hooks in 3 seconds, holds till the end. Perfect for Instagram, YouTube & TikTok.</div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">03</div>
+        <div class="service-title">Thumbnail Design</div>
+        <div class="service-desc">High-CTR thumbnails that scream "click me." Bold typography, strong contrast, designed to convert impressions.</div>
+      </div>
+      <div class="service-card">
+        <div class="service-num">04</div>
+        <div class="service-title">Rush Delivery</div>
+        <div class="service-desc">Need it yesterday? Rush edits available. Most standard projects delivered in 24–48 hours, guaranteed.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THUMBNAILS -->
+<section id="thumbnails">
+  <div class="section-inner">
+    <div class="section-label">Portfolio</div>
+    <div class="section-title">THUMBNAILS</div>
+    <div class="thumb-grid" id="thumbGrid">
+      <div class="thumb-item">
+        <div class="thumb-img" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);">
+          <div class="thumb-img-label">Gaming Highlights Vol.1</div>
+        </div>
+        <div class="thumb-meta"><span class="thumb-tag">Gaming</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
+      </div>
+      <div class="thumb-item">
+        <div class="thumb-img" style="background:linear-gradient(135deg,#7f1d1d,#ef4444);">
+          <div class="thumb-img-label">10 Editing Tips That Changed My Life</div>
+        </div>
+        <div class="thumb-meta"><span class="thumb-tag">Tutorial</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
+      </div>
+      <div class="thumb-item">
+        <div class="thumb-img" style="background:linear-gradient(135deg,#064e3b,#10b981);">
+          <div class="thumb-img-label">Cinematic B-Roll Breakdown</div>
+        </div>
+        <div class="thumb-meta"><span class="thumb-tag">Cinematic</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <button class="thumb-add-btn" onclick="openModal('thumb')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        Add your thumbnail
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEOS -->
+<section id="videos">
+  <div class="section-inner">
+    <div class="section-label">Portfolio</div>
+    <div class="section-title">EDITED VIDEOS</div>
+    <div class="video-grid" id="videoGrid">
+      <div class="video-card">
+        <div class="video-thumb">
+          <div class="video-play"><div class="play-tri"></div></div>
+          <div class="video-duration">4:22</div>
+        </div>
+        <div class="video-info">
+          <div class="video-title">Gaming Montage — Epic Highlights Reel</div>
+          <div class="video-meta"><span>YouTube</span><span>Sample</span></div>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb" style="background:#111">
+          <div class="video-play"><div class="play-tri"></div></div>
+          <div class="video-duration">0:58</div>
+        </div>
+        <div class="video-info">
+          <div class="video-title">Instagram Reel — Transition Pack Showcase</div>
+          <div class="video-meta"><span>Reels</span><span>Sample</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <button class="video-add-btn" onclick="openModal('video')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        Add your video
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-left">
+      <div class="about-avatar-box">A
+        <div class="about-accent-badge">ASHUXD</div>
+      </div>
+    </div>
+    <div class="about-content">
+      <div class="section-label">About me</div>
+      <h2>I EDIT.<br>YOU GROW.</h2>
+      <p>I'm a video editor obsessed with pacing, storytelling, and making every cut count. Specializing in YouTube content and short-form social — I bring raw footage to life.</p>
+      <p>Whether it's a 20-minute deep-dive or a 15-second Reel, I approach every project with the same intensity. Fast, sharp, and always on-brand.</p>
+      <p style="color:var(--accent);font-weight:600">Based in India. Working with creators worldwide.</p>
+      <div class="tools-list">
+        <span class="tool-tag">Premiere Pro</span>
+        <span class="tool-tag">After Effects</span>
+        <span class="tool-tag">DaVinci Resolve</span>
+        <span class="tool-tag">Photoshop</span>
+        <span class="tool-tag">CapCut</span>
+        <span class="tool-tag">4K Export</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-left">
+      <div class="section-label">Get in touch</div>
+      <h2>LET'S<br>MAKE<br><span>SOMETHING.</span></h2>
+      <p>Got a project? Drop a message and I'll get back to you within 24 hours. Always open for new collabs.</p>
+      <div class="contact-socials">
+        <a href="#" class="social-link">IG</a>
+        <a href="#" class="social-link">YT</a>
+        <a href="#" class="social-link">X</a>
+        <a href="#" class="social-link">EMAIL</a>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="handleContactSubmit(event)">
+      <input type="text" placeholder="Your name" required>
+      <input type="email" placeholder="Email address" required>
+      <input type="text" placeholder="Project type (YouTube, Reels, etc.)">
+      <textarea placeholder="Tell me about your project..."></textarea>
+      <button type="submit" class="form-submit">Send it →</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">ASHU<span>XD</span></div>
+  <div>© 2025 AshuxD · All rights reserved</div>
+  <div style="color:var(--accent)">Available for work</div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="thumbModal" onclick="closeModalOutside(event,'thumbModal')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">ADD THUMBNAIL</span>
+      <button class="modal-close" onclick="closeModal('thumbModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-preview" id="thumbPreview">Preview will appear here</div>
+      <div class="modal-input-group">
+        <label class="modal-label">Upload image</label>
+        <input type="file" accept="image/*" class="modal-input" id="thumbFileInput" onchange="previewThumbImage(event)">
+      </div>
+      <div class="modal-input-group">
+        <label class="modal-label">Title</label>
+        <input type="text" class="modal-input" id="thumbTitle" placeholder="e.g. Gaming Highlights 2025">
+      </div>
+      <div class="modal-input-group">
+        <label class="modal-label">Tag</label>
+        <input type="text" class="modal-input" id="thumbTag" placeholder="e.g. Gaming, Tutorial, Vlog">
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn-cancel" onclick="closeModal('thumbModal')">Cancel</button>
+        <button class="modal-btn-save" onclick="addThumbnail()">Add to portfolio</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="videoModal" onclick="closeModalOutside(event,'videoModal')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">ADD VIDEO</span>
+      <button class="modal-close" onclick="closeModal('videoModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-input-group">
+        <label class="modal-label">YouTube / Vimeo embed URL</label>
+        <input type="text" class="modal-input" id="videoUrl" placeholder="https://www.youtube.com/embed/...">
+      </div>
+      <div class="modal-input-group">
+        <label class="modal-label">Video title</label>
+        <input type="text" class="modal-input" id="videoTitle" placeholder="e.g. Brand Video — Company Launch">
+      </div>
+      <div class="modal-input-group">
+        <label class="modal-label">Platform</label>
+        <input type="text" class="modal-input" id="videoPlatform" placeholder="e.g. YouTube, Reels, TikTok">
+      </div>
+      <div class="modal-input-group">
+        <label class="modal-label">Duration</label>
+        <input type="text" class="modal-input" id="videoDuration" placeholder="e.g. 4:22">
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn-cancel" onclick="closeModal('videoModal')">Cancel</button>
+        <button class="modal-btn-save" onclick="addVideo()">Add to portfolio</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let thumbImageData=null;
+function openModal(t){document.getElementById(t==='thumb'?'thumbModal':'videoModal').classList.add('open');document.body.style.overflow='hidden'}
+function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow=''}
+function closeModalOutside(e,id){if(e.target===e.currentTarget)closeModal(id)}
+function previewThumbImage(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{thumbImageData=ev.target.result;const p=document.getElementById('thumbPreview');p.innerHTML='<img src="'+ev.target.result+'">'};r.readAsDataURL(f)}
+function addThumbnail(){
+  const title=document.getElementById('thumbTitle').value.trim()||'Untitled';
+  const tag=document.getElementById('thumbTag').value.trim()||'Portfolio';
+  const grid=document.getElementById('thumbGrid');
+  const card=document.createElement('div');card.className='thumb-item';
+  const img=thumbImageData?'<img src="'+thumbImageData+'" style="width:100%;height:100%;object-fit:cover;">':'';
+  card.innerHTML=`<div class="thumb-img" style="background:#1a1a1a">${img}<div class="thumb-img-label">${title}</div></div><div class="thumb-meta"><span class="thumb-tag">${tag}</span><span style="font-size:12px;color:var(--text3)">Added</span></div>`;
+  grid.appendChild(card);
+  document.getElementById('thumbTitle').value='';document.getElementById('thumbTag').value='';document.getElementById('thumbFileInput').value='';document.getElementById('thumbPreview').innerHTML='Preview will appear here';thumbImageData=null;closeModal('thumbModal');
+}
+function addVideo(){
+  const url=document.getElementById('videoUrl').value.trim();
+  const title=document.getElementById('videoTitle').value.trim()||'Untitled Video';
+  const platform=document.getElementById('videoPlatform').value.trim()||'Video';
+  const dur=document.getElementById('videoDuration').value.trim()||'—';
+  const grid=document.getElementById('videoGrid');
+  const card=document.createElement('div');card.className='video-card';
+  const th=url?`<iframe src="${url}" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>`:`<div class="video-play"><div class="play-tri"></div></div><div class="video-duration">${dur}</div>`;
+  card.innerHTML=`<div class="video-thumb" style="background:#111">${th}</div><div class="video-info"><div class="video-title">${title}</div><div class="video-meta"><span>${platform}</span><span>Added</span></div></div>`;
+  grid.appendChild(card);
+  ['videoUrl','videoTitle','videoPlatform','videoDuration'].forEach(id=>document.getElementById(id).value='');
+  closeModal('videoModal');
+}
+function handleContactSubmit(e){
+  e.preventDefault();const btn=e.target.querySelector('.form-submit');
+  btn.textContent='Sent! ✓';btn.style.background='#16a34a';
+  setTimeout(()=>{btn.textContent='Send it →';btn.style.background=''},3000);
+  e.target.reset();
+}
+</script>
+</body>
+</html>
