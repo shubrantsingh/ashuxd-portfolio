@@ -84,19 +84,37 @@ nav::before{content:'';position:absolute;inset:0;background:rgba(10,10,10,0.9);b
 .service-desc{font-size:13px;color:var(--text2);line-height:1.65}
 
 /* THUMBNAILS */
-#thumbnails{padding:100px 5%;border-bottom:1px solid var(--border);background:var(--bg)}
-.thumb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
-.thumb-item{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface);transition:transform 0.2s,border-color 0.2s;cursor:pointer}
+#thumbnails{padding:100px 0;border-bottom:1px solid var(--border);background:var(--bg)}
+#thumbnails .section-inner{padding:0 5%;margin-bottom:40px}
+.thumb-carousel-wrap{position:relative;overflow:hidden}
+.thumb-carousel-wrap::before,.thumb-carousel-wrap::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none}
+.thumb-carousel-wrap::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+.thumb-carousel-wrap::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+.thumb-track-outer{overflow:hidden}
+.thumb-track{display:flex;gap:16px;width:max-content;animation:thumbScroll 22s linear infinite}
+.thumb-track:hover{animation-play-state:paused}
+@keyframes thumbScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.thumb-item{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface);transition:transform 0.2s,border-color 0.2s;cursor:pointer;width:300px;flex-shrink:0}
 .thumb-item:hover{transform:translateY(-4px);border-color:var(--accent)}
 .thumb-img{aspect-ratio:16/9;width:100%;display:flex;align-items:flex-end;position:relative;overflow:hidden}
 .thumb-img-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);padding:24px 14px 12px;font-size:13px;color:#fff;font-weight:600}
 .thumb-meta{padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
 .thumb-tag{font-size:11px;font-weight:600;color:var(--accent);background:rgba(124,58,237,0.15);padding:4px 10px;border-radius:100px;letter-spacing:0.8px;text-transform:uppercase}
+.thumb-add-btn{margin:20px 5% 0;padding:20px;border:1px dashed var(--border2);border-radius:var(--radius-lg);background:transparent;cursor:pointer;font-size:13px;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:8px;transition:border-color 0.2s,color 0.2s;font-family:var(--font-body);letter-spacing:0.5px;width:calc(100% - 10%)}
+.thumb-add-btn:hover{border-color:var(--accent);color:var(--accent)}
 
 /* VIDEOS */
-#videos{padding:100px 5%;border-bottom:1px solid var(--border);background:var(--surface)}
-.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
-.video-card{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--bg);transition:transform 0.2s,border-color 0.2s}
+#videos{padding:100px 0;border-bottom:1px solid var(--border);background:var(--surface)}
+#videos .section-inner{padding:0 5%;margin-bottom:40px}
+.video-carousel-wrap{position:relative;overflow:hidden}
+.video-carousel-wrap::before,.video-carousel-wrap::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none}
+.video-carousel-wrap::before{left:0;background:linear-gradient(to right,var(--surface),transparent)}
+.video-carousel-wrap::after{right:0;background:linear-gradient(to left,var(--surface),transparent)}
+.video-track-outer{overflow:hidden}
+.video-track{display:flex;gap:16px;width:max-content;animation:videoScroll 26s linear infinite}
+.video-track:hover{animation-play-state:paused}
+@keyframes videoScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.video-card{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--bg);transition:transform 0.2s,border-color 0.2s;width:320px;flex-shrink:0}
 .video-card:hover{transform:translateY(-4px);border-color:var(--accent)}
 .video-thumb{aspect-ratio:16/9;background:#0d0d0d;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .video-play{width:56px;height:56px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform 0.2s,background 0.2s}
@@ -106,6 +124,25 @@ nav::before{content:'';position:absolute;inset:0;background:rgba(10,10,10,0.9);b
 .video-info{padding:16px}
 .video-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.4}
 .video-meta{font-size:12px;color:var(--text3);display:flex;gap:12px}
+.video-add-btn{width:100%;padding:24px;border:1px dashed var(--border2);border-radius:var(--radius-lg);background:transparent;cursor:pointer;font-size:13px;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:8px;transition:border-color 0.2s,color 0.2s;font-family:var(--font-body)}
+.video-add-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.96);display:none;align-items:center;justify-content:center;padding:20px;animation:lbFadeIn 0.2s ease}
+.lightbox.open{display:flex}
+@keyframes lbFadeIn{from{opacity:0}to{opacity:1}}
+.lightbox-inner{position:relative;width:100%;max-width:1000px}
+.lightbox-media{width:100%;border-radius:var(--radius-lg);overflow:hidden;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}
+.lightbox-media img{width:100%;height:100%;object-fit:contain}
+.lightbox-media iframe{width:100%;height:100%;border:none}
+.lightbox-media .lb-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:var(--text2);font-size:14px}
+.lightbox-media .lb-placeholder .lb-play{width:72px;height:72px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.lightbox-media .lb-placeholder .lb-play-tri{width:0;height:0;border-style:solid;border-width:12px 0 12px 22px;border-color:transparent transparent transparent #fff;margin-left:5px}
+.lightbox-info{margin-top:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.lightbox-title{font-family:var(--font-display);font-size:22px;letter-spacing:1px;color:var(--text)}
+.lightbox-tag{font-size:11px;font-weight:600;color:var(--accent);background:rgba(124,58,237,0.15);padding:5px 12px;border-radius:100px;letter-spacing:1px;text-transform:uppercase}
+.lightbox-close{position:absolute;top:-48px;right:0;width:36px;height:36px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text2);transition:border-color 0.2s,color 0.2s;line-height:1}
+.lightbox-close:hover{border-color:var(--accent);color:var(--accent)}
 
 /* ABOUT */
 #about{padding:100px 5%;border-bottom:1px solid var(--border);background:var(--bg)}
@@ -299,25 +336,41 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
   <div class="section-inner">
     <div class="section-label">Portfolio</div>
     <div class="section-title">THUMBNAILS</div>
-    <div class="thumb-grid" id="thumbGrid">
-      <div class="thumb-item">
-        <div class="thumb-img" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);">
-          <img src="t1.jpg" style="width:100%;height:100%;object-fit:cover;">
-          <div class="thumb-img-label">Gaming Highlights Vol.1</div>
+  </div>
+  <div class="thumb-carousel-wrap">
+    <div class="thumb-track-outer">
+      <div class="thumb-track" id="thumbTrack">
+        <!-- original items -->
+        <div class="thumb-item">
+          <div class="thumb-img" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);">
+            <div class="thumb-img-label">Gaming Highlights Vol.1</div>
+          </div>
+          <div class="thumb-meta"><span class="thumb-tag">Gaming</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
         </div>
-        <div class="thumb-meta"><span class="thumb-tag">Gaming</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
-      </div>
-      <div class="thumb-item">
-        <div class="thumb-img" style="background:linear-gradient(135deg,#7f1d1d,#ef4444);">
-          <div class="thumb-img-label">10 Editing Tips That Changed My Life</div>
+        <div class="thumb-item">
+          <div class="thumb-img" style="background:linear-gradient(135deg,#7f1d1d,#ef4444);">
+            <div class="thumb-img-label">10 Editing Tips That Changed My Life</div>
+          </div>
+          <div class="thumb-meta"><span class="thumb-tag">Tutorial</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
         </div>
-        <div class="thumb-meta"><span class="thumb-tag">Tutorial</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
-      </div>
-      <div class="thumb-item">
-        <div class="thumb-img" style="background:linear-gradient(135deg,#064e3b,#10b981);">
-          <div class="thumb-img-label">Cinematic B-Roll Breakdown</div>
+        <div class="thumb-item">
+          <div class="thumb-img" style="background:linear-gradient(135deg,#064e3b,#10b981);">
+            <div class="thumb-img-label">Cinematic B-Roll Breakdown</div>
+          </div>
+          <div class="thumb-meta"><span class="thumb-tag">Cinematic</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
         </div>
-        <div class="thumb-meta"><span class="thumb-tag">Cinematic</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
+        <div class="thumb-item">
+          <div class="thumb-img" style="background:linear-gradient(135deg,#312e81,#7c3aed);">
+            <div class="thumb-img-label">Short-Form Reel Edit</div>
+          </div>
+          <div class="thumb-meta"><span class="thumb-tag">Reels</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
+        </div>
+        <div class="thumb-item">
+          <div class="thumb-img" style="background:linear-gradient(135deg,#1c1917,#78350f);">
+            <div class="thumb-img-label">Vlog Day In My Life</div>
+          </div>
+          <div class="thumb-meta"><span class="thumb-tag">Vlog</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -328,25 +381,59 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
   <div class="section-inner">
     <div class="section-label">Portfolio</div>
     <div class="section-title">EDITED VIDEOS</div>
-    <div class="video-grid" id="videoGrid">
-      <div class="video-card">
-        <div class="video-thumb">
-          <div class="video-play"><div class="play-tri"></div></div>
-          <div class="video-duration">4:22</div>
+  </div>
+  <div class="video-carousel-wrap">
+    <div class="video-track-outer">
+      <div class="video-track" id="videoTrack">
+        <div class="video-card">
+          <div class="video-thumb">
+            <div class="video-play"><div class="play-tri"></div></div>
+            <div class="video-duration">4:22</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Gaming Montage — Epic Highlights Reel</div>
+            <div class="video-meta"><span>YouTube</span><span>Sample</span></div>
+          </div>
         </div>
-        <div class="video-info">
-          <div class="video-title">Gaming Montage — Epic Highlights Reel</div>
-          <div class="video-meta"><span>YouTube</span><span>Sample</span></div>
+        <div class="video-card">
+          <div class="video-thumb" style="background:#111">
+            <div class="video-play"><div class="play-tri"></div></div>
+            <div class="video-duration">0:58</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Instagram Reel — Transition Pack Showcase</div>
+            <div class="video-meta"><span>Reels</span><span>Sample</span></div>
+          </div>
         </div>
-      </div>
-      <div class="video-card">
-        <div class="video-thumb" style="background:#111">
-          <div class="video-play"><div class="play-tri"></div></div>
-          <div class="video-duration">0:58</div>
+        <div class="video-card">
+          <div class="video-thumb" style="background:#0a0a1a">
+            <div class="video-play"><div class="play-tri"></div></div>
+            <div class="video-duration">2:14</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Cinematic Travel Edit — Golden Hour</div>
+            <div class="video-meta"><span>YouTube</span><span>Sample</span></div>
+          </div>
         </div>
-        <div class="video-info">
-          <div class="video-title">Instagram Reel — Transition Pack Showcase</div>
-          <div class="video-meta"><span>Reels</span><span>Sample</span></div>
+        <div class="video-card">
+          <div class="video-thumb" style="background:#140a1a">
+            <div class="video-play"><div class="play-tri"></div></div>
+            <div class="video-duration">1:05</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">TikTok Short — Trending Audio Cut</div>
+            <div class="video-meta"><span>TikTok</span><span>Sample</span></div>
+          </div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumb" style="background:#0a150a">
+            <div class="video-play"><div class="play-tri"></div></div>
+            <div class="video-duration">6:48</div>
+          </div>
+          <div class="video-info">
+            <div class="video-title">Vlog Edit — Day In My Life Series</div>
+            <div class="video-meta"><span>YouTube</span><span>Sample</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -408,6 +495,18 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
   <div>© 2025 AshuxD · All rights reserved</div>
   <div style="color:var(--accent)">Available for work</div>
 </footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOutside(event)">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()">×</button>
+    <div class="lightbox-media" id="lbMedia"></div>
+    <div class="lightbox-info">
+      <div class="lightbox-title" id="lbTitle"></div>
+      <div class="lightbox-tag" id="lbTag"></div>
+    </div>
+  </div>
+</div>
 
 <!-- MODALS -->
 <div class="modal-overlay" id="thumbModal" onclick="closeModalOutside(event,'thumbModal')">
@@ -471,18 +570,127 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
 
 <script>
 let thumbImageData=null;
+
+/* ── LIGHTBOX ── */
+function openLightbox(type, title, tag, imgSrc, videoUrl){
+  const lb=document.getElementById('lightbox');
+  const media=document.getElementById('lbMedia');
+  document.getElementById('lbTitle').textContent=title;
+  document.getElementById('lbTag').textContent=tag;
+  media.innerHTML='';
+  if(type==='thumb'){
+    if(imgSrc){const img=document.createElement('img');img.src=imgSrc;media.appendChild(img);}
+    else{media.innerHTML=`<div class="lb-placeholder"><div style="font-family:var(--font-display);font-size:18px;color:var(--text2);letter-spacing:1px">${title}</div></div>`;}
+  } else {
+    if(videoUrl){const fr=document.createElement('iframe');fr.src=videoUrl;fr.allowFullscreen=true;media.appendChild(fr);}
+    else{media.innerHTML=`<div class="lb-placeholder"><div class="lb-play"><div class="lb-play-tri"></div></div><div>${title}</div></div>`;}
+  }
+  lb.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lbMedia').innerHTML='';
+  document.body.style.overflow='';
+}
+function closeLightboxOutside(e){if(e.target===e.currentTarget)closeLightbox();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+
+/* ── CAROUSELS ── */
+function attachThumbClicks(track){
+  track.querySelectorAll('.thumb-item:not(.thumb-clone)').forEach(item=>{
+    item.onclick=()=>{
+      const title=item.querySelector('.thumb-img-label')?.textContent||'Thumbnail';
+      const tag=item.querySelector('.thumb-tag')?.textContent||'Portfolio';
+      const img=item.querySelector('img');
+      const bgEl=item.querySelector('.thumb-img');
+      openLightbox('thumb',title,tag,img?img.src:null,null);
+    };
+  });
+}
+function attachVideoClicks(track){
+  track.querySelectorAll('.video-card:not(.video-clone)').forEach(card=>{
+    card.onclick=()=>{
+      const title=card.querySelector('.video-title')?.textContent||'Video';
+      const meta=card.querySelectorAll('.video-meta span');
+      const tag=meta[0]?.textContent||'Video';
+      const fr=card.querySelector('iframe');
+      openLightbox('video',title,tag,null,fr?fr.src:null);
+    };
+  });
+}
+
+function syncCarousel(){
+  const track=document.getElementById('thumbTrack');
+  track.querySelectorAll('.thumb-clone').forEach(el=>el.remove());
+  Array.from(track.children).forEach(child=>{
+    const clone=child.cloneNode(true);clone.classList.add('thumb-clone');
+    // clones open lightbox too (same data)
+    clone.onclick=child.onclick;
+    track.appendChild(clone);
+  });
+  const count=track.querySelectorAll('.thumb-item:not(.thumb-clone)').length;
+  track.style.animationDuration=Math.max(12,count*4.5)+'s';
+}
+function syncVideoCarousel(){
+  const track=document.getElementById('videoTrack');
+  track.querySelectorAll('.video-clone').forEach(el=>el.remove());
+  Array.from(track.children).forEach(child=>{
+    const clone=child.cloneNode(true);clone.classList.add('video-clone');
+    clone.onclick=child.onclick;
+    track.appendChild(clone);
+  });
+  const count=track.querySelectorAll('.video-card:not(.video-clone)').length;
+  track.style.animationDuration=Math.max(14,count*5.5)+'s';
+}
+
+window.addEventListener('load',()=>{
+  attachThumbClicks(document.getElementById('thumbTrack'));
+  attachVideoClicks(document.getElementById('videoTrack'));
+  syncCarousel();
+  syncVideoCarousel();
+  // wire clone clicks after sync
+  document.getElementById('thumbTrack').querySelectorAll('.thumb-clone').forEach(clone=>{
+    const orig=document.getElementById('thumbTrack').querySelector('.thumb-item:not(.thumb-clone)');
+    clone.style.cursor='pointer';
+    clone.onclick=function(){
+      const title=this.querySelector('.thumb-img-label')?.textContent||'Thumbnail';
+      const tag=this.querySelector('.thumb-tag')?.textContent||'Portfolio';
+      const img=this.querySelector('img');
+      openLightbox('thumb',title,tag,img?img.src:null,null);
+    };
+  });
+  document.getElementById('videoTrack').querySelectorAll('.video-clone').forEach(clone=>{
+    clone.style.cursor='pointer';
+    clone.onclick=function(){
+      const title=this.querySelector('.video-title')?.textContent||'Video';
+      const meta=this.querySelectorAll('.video-meta span');
+      const tag=meta[0]?.textContent||'Video';
+      const fr=this.querySelector('iframe');
+      openLightbox('video',title,tag,null,fr?fr.src:null);
+    };
+  });
+});
+
+/* ── MODALS (add/edit) ── */
 function openModal(t){document.getElementById(t==='thumb'?'thumbModal':'videoModal').classList.add('open');document.body.style.overflow='hidden'}
 function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow=''}
 function closeModalOutside(e,id){if(e.target===e.currentTarget)closeModal(id)}
 function previewThumbImage(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{thumbImageData=ev.target.result;const p=document.getElementById('thumbPreview');p.innerHTML='<img src="'+ev.target.result+'">'};r.readAsDataURL(f)}
+function buildThumbCard(title,tag,imgData){
+  const card=document.createElement('div');card.className='thumb-item';card.style.cursor='pointer';
+  const img=imgData?'<img src="'+imgData+'" style="width:100%;height:100%;object-fit:cover;">':'';
+  card.innerHTML=`<div class="thumb-img" style="background:#1a1a1a">${img}<div class="thumb-img-label">${title}</div></div><div class="thumb-meta"><span class="thumb-tag">${tag}</span><span style="font-size:12px;color:var(--text3)">Added</span></div>`;
+  card.onclick=()=>openLightbox('thumb',title,tag,imgData,null);
+  return card;
+}
 function addThumbnail(){
   const title=document.getElementById('thumbTitle').value.trim()||'Untitled';
   const tag=document.getElementById('thumbTag').value.trim()||'Portfolio';
-  const grid=document.getElementById('thumbGrid');
-  const card=document.createElement('div');card.className='thumb-item';
-  const img=thumbImageData?'<img src="'+thumbImageData+'" style="width:100%;height:100%;object-fit:cover;">':'';
-  card.innerHTML=`<div class="thumb-img" style="background:#1a1a1a">${img}<div class="thumb-img-label">${title}</div></div><div class="thumb-meta"><span class="thumb-tag">${tag}</span><span style="font-size:12px;color:var(--text3)">Added</span></div>`;
-  grid.appendChild(card);
+  const track=document.getElementById('thumbTrack');
+  track.querySelectorAll('.thumb-clone').forEach(el=>el.remove());
+  track.appendChild(buildThumbCard(title,tag,thumbImageData));
+  syncCarousel();
   document.getElementById('thumbTitle').value='';document.getElementById('thumbTag').value='';document.getElementById('thumbFileInput').value='';document.getElementById('thumbPreview').innerHTML='Preview will appear here';thumbImageData=null;closeModal('thumbModal');
 }
 function addVideo(){
@@ -490,11 +698,14 @@ function addVideo(){
   const title=document.getElementById('videoTitle').value.trim()||'Untitled Video';
   const platform=document.getElementById('videoPlatform').value.trim()||'Video';
   const dur=document.getElementById('videoDuration').value.trim()||'—';
-  const grid=document.getElementById('videoGrid');
-  const card=document.createElement('div');card.className='video-card';
+  const track=document.getElementById('videoTrack');
+  track.querySelectorAll('.video-clone').forEach(el=>el.remove());
+  const card=document.createElement('div');card.className='video-card';card.style.cursor='pointer';
   const th=url?`<iframe src="${url}" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>`:`<div class="video-play"><div class="play-tri"></div></div><div class="video-duration">${dur}</div>`;
   card.innerHTML=`<div class="video-thumb" style="background:#111">${th}</div><div class="video-info"><div class="video-title">${title}</div><div class="video-meta"><span>${platform}</span><span>Added</span></div></div>`;
-  grid.appendChild(card);
+  card.onclick=()=>openLightbox('video',title,platform,null,url||null);
+  track.appendChild(card);
+  syncVideoCarousel();
   ['videoUrl','videoTitle','videoPlatform','videoDuration'].forEach(id=>document.getElementById(id).value='');
   closeModal('videoModal');
 }
