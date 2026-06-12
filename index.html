@@ -395,7 +395,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
   <div class="video-carousel-wrap">
     <div class="video-track-outer">
       <div class="video-track" id="videoTrack">
-        <div class="video-card" data-video-url="https://www.youtube.com/embed/dgscTvOdlVs">
+        <div class="video-card" data-video-url="https://www.youtube.com/embed/knLHS9YyEmE">
           <div class="video-thumb">
             <img src="t1.jpg" alt="Gaming montage video thumbnail">
             <div class="video-play"><div class="play-tri"></div></div>
@@ -592,6 +592,24 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
 let thumbImageData=null;
 let videoImageData=null;
 
+function normalizeVideoUrl(url){
+  if(!url)return '';
+  try{
+    const parsed=new URL(url);
+    let id='';
+    if(parsed.hostname.includes('youtu.be'))id=parsed.pathname.slice(1);
+    else if(parsed.hostname.includes('youtube.com')){
+      if(parsed.pathname.startsWith('/watch'))id=parsed.searchParams.get('v')||'';
+      else if(parsed.pathname.startsWith('/shorts/'))id=parsed.pathname.split('/')[2]||'';
+      else if(parsed.pathname.startsWith('/embed/'))id=parsed.pathname.split('/')[2]||'';
+    }
+    if(id)return 'https://www.youtube.com/embed/'+id+'?rel=0';
+    return url;
+  }catch(e){
+    return url;
+  }
+}
+
 /* ── LIGHTBOX ── */
 function openLightbox(type, title, tag, imgSrc, videoUrl){
   const lb=document.getElementById('lightbox');
@@ -603,7 +621,15 @@ function openLightbox(type, title, tag, imgSrc, videoUrl){
     if(imgSrc){const img=document.createElement('img');img.src=imgSrc;media.appendChild(img);}
     else{media.innerHTML=`<div class="lb-placeholder"><div style="font-family:var(--font-display);font-size:18px;color:var(--text2);letter-spacing:1px">${title}</div></div>`;}
   } else {
-    if(videoUrl){const fr=document.createElement('iframe');fr.src=videoUrl;fr.allowFullscreen=true;media.appendChild(fr);}
+    if(videoUrl){
+      const fr=document.createElement('iframe');
+      fr.src=normalizeVideoUrl(videoUrl);
+      fr.title=title;
+      fr.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      fr.referrerPolicy='strict-origin-when-cross-origin';
+      fr.allowFullscreen=true;
+      media.appendChild(fr);
+    }
     else{media.innerHTML=`<div class="lb-placeholder"><div class="lb-play"><div class="lb-play-tri"></div></div><div>${title}</div></div>`;}
   }
   lb.classList.add('open');
