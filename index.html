@@ -92,8 +92,6 @@ nav::before{content:'';position:absolute;inset:0;background:rgba(10,10,10,0.9);b
 .thumb-img-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);padding:24px 14px 12px;font-size:13px;color:#fff;font-weight:600}
 .thumb-meta{padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
 .thumb-tag{font-size:11px;font-weight:600;color:var(--accent);background:rgba(124,58,237,0.15);padding:4px 10px;border-radius:100px;letter-spacing:0.8px;text-transform:uppercase}
-.thumb-add-btn{width:100%;padding:20px;border:1px dashed var(--border2);border-radius:var(--radius-lg);background:transparent;cursor:pointer;font-size:13px;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:8px;transition:border-color 0.2s,color 0.2s;font-family:var(--font-body);letter-spacing:0.5px}
-.thumb-add-btn:hover{border-color:var(--accent);color:var(--accent)}
 
 /* VIDEOS */
 #videos{padding:100px 5%;border-bottom:1px solid var(--border);background:var(--surface)}
@@ -108,8 +106,6 @@ nav::before{content:'';position:absolute;inset:0;background:rgba(10,10,10,0.9);b
 .video-info{padding:16px}
 .video-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.4}
 .video-meta{font-size:12px;color:var(--text3);display:flex;gap:12px}
-.video-add-btn{width:100%;padding:24px;border:1px dashed var(--border2);border-radius:var(--radius-lg);background:transparent;cursor:pointer;font-size:13px;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:8px;transition:border-color 0.2s,color 0.2s;font-family:var(--font-body)}
-.video-add-btn:hover{border-color:var(--accent);color:var(--accent)}
 
 /* ABOUT */
 #about{padding:100px 5%;border-bottom:1px solid var(--border);background:var(--bg)}
@@ -323,12 +319,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
         <div class="thumb-meta"><span class="thumb-tag">Cinematic</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
       </div>
     </div>
-    <div style="margin-top:14px">
-      <button class="thumb-add-btn" onclick="openModal('thumb')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-        Add your thumbnail
-      </button>
-    </div>
   </div>
 </section>
 
@@ -358,12 +348,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
           <div class="video-meta"><span>Reels</span><span>Sample</span></div>
         </div>
       </div>
-    </div>
-    <div style="margin-top:14px">
-      <button class="video-add-btn" onclick="openModal('video')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-        Add your video
-      </button>
     </div>
   </div>
 </section>
