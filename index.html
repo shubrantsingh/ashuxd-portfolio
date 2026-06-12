@@ -96,7 +96,9 @@ nav::before{content:'';position:absolute;inset:0;background:rgba(10,10,10,0.9);b
 @keyframes thumbScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .thumb-item{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface);transition:transform 0.2s,border-color 0.2s;cursor:pointer;width:300px;flex-shrink:0}
 .thumb-item:hover{transform:translateY(-4px);border-color:var(--accent)}
-.thumb-img{aspect-ratio:16/9;width:100%;display:flex;align-items:flex-end;position:relative;overflow:hidden}
+.thumb-img{aspect-ratio:16/9;width:100%;display:flex;align-items:flex-end;position:relative;overflow:hidden;background:#111}
+.thumb-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.35s ease}
+.thumb-item:hover .thumb-img img{transform:scale(1.04)}
 .thumb-img-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);padding:24px 14px 12px;font-size:13px;color:#fff;font-weight:600}
 .thumb-meta{padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
 .thumb-tag{font-size:11px;font-weight:600;color:var(--accent);background:rgba(124,58,237,0.15);padding:4px 10px;border-radius:100px;letter-spacing:0.8px;text-transform:uppercase}
@@ -116,11 +118,14 @@ nav::before{content:'';position:absolute;inset:0;background:rgba(10,10,10,0.9);b
 @keyframes videoScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .video-card{border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:var(--bg);transition:transform 0.2s,border-color 0.2s;width:320px;flex-shrink:0}
 .video-card:hover{transform:translateY(-4px);border-color:var(--accent)}
-.video-thumb{aspect-ratio:16/9;background:#0d0d0d;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.video-play{width:56px;height:56px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform 0.2s,background 0.2s}
+.video-thumb{aspect-ratio:16/9;background:#0d0d0d;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.video-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.35s ease}
+.video-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.45),rgba(0,0,0,0.06));pointer-events:none}
+.video-card:hover .video-thumb img{transform:scale(1.04)}
+.video-play{position:relative;z-index:1;width:56px;height:56px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform 0.2s,background 0.2s}
 .video-card:hover .video-play{transform:scale(1.12);background:var(--accent2)}
 .play-tri{width:0;height:0;border-style:solid;border-width:9px 0 9px 16px;border-color:transparent transparent transparent #fff;margin-left:4px}
-.video-duration{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,0.8);color:#fff;font-size:11px;padding:3px 7px;border-radius:4px;font-weight:600}
+.video-duration{position:absolute;z-index:1;bottom:10px;right:12px;background:rgba(0,0,0,0.8);color:#fff;font-size:11px;padding:3px 7px;border-radius:4px;font-weight:600}
 .video-info{padding:16px}
 .video-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.4}
 .video-meta{font-size:12px;color:var(--text3);display:flex;gap:12px}
@@ -342,32 +347,37 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
       <div class="thumb-track" id="thumbTrack">
         <!-- original items -->
         <div class="thumb-item">
-          <div class="thumb-img" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);">
-            <div class="thumb-img-label">Gaming Highlights Vol.1</div>
+          <div class="thumb-img">
+            <img src="t1.jpg" alt="Giant Subway thumbnail design">
+            <div class="thumb-img-label">Giant Subway Challenge</div>
           </div>
-          <div class="thumb-meta"><span class="thumb-tag">Gaming</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
+          <div class="thumb-meta"><span class="thumb-tag">Food</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
         </div>
         <div class="thumb-item">
-          <div class="thumb-img" style="background:linear-gradient(135deg,#7f1d1d,#ef4444);">
-            <div class="thumb-img-label">10 Editing Tips That Changed My Life</div>
+          <div class="thumb-img">
+            <img src="t1.jpg" alt="Giant Subway thumbnail design">
+            <div class="thumb-img-label">Giant Subway Thumbnail</div>
           </div>
-          <div class="thumb-meta"><span class="thumb-tag">Tutorial</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
+          <div class="thumb-meta"><span class="thumb-tag">YouTube</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
         </div>
         <div class="thumb-item">
-          <div class="thumb-img" style="background:linear-gradient(135deg,#064e3b,#10b981);">
-            <div class="thumb-img-label">Cinematic B-Roll Breakdown</div>
+          <div class="thumb-img">
+            <img src="t1.jpg" alt="Giant Subway thumbnail design">
+            <div class="thumb-img-label">Food Review Design</div>
           </div>
-          <div class="thumb-meta"><span class="thumb-tag">Cinematic</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
+          <div class="thumb-meta"><span class="thumb-tag">Review</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
         </div>
         <div class="thumb-item">
-          <div class="thumb-img" style="background:linear-gradient(135deg,#312e81,#7c3aed);">
-            <div class="thumb-img-label">Short-Form Reel Edit</div>
+          <div class="thumb-img">
+            <img src="t1.jpg" alt="Giant Subway thumbnail design">
+            <div class="thumb-img-label">Bold Creator Thumbnail</div>
           </div>
-          <div class="thumb-meta"><span class="thumb-tag">Reels</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
+          <div class="thumb-meta"><span class="thumb-tag">Creator</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
         </div>
         <div class="thumb-item">
-          <div class="thumb-img" style="background:linear-gradient(135deg,#1c1917,#78350f);">
-            <div class="thumb-img-label">Vlog Day In My Life</div>
+          <div class="thumb-img">
+            <img src="t1.jpg" alt="Giant Subway thumbnail design">
+            <div class="thumb-img-label">Subway Style Edit</div>
           </div>
           <div class="thumb-meta"><span class="thumb-tag">Vlog</span><span style="font-size:12px;color:var(--text3)">Sample</span></div>
         </div>
@@ -385,8 +395,9 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
   <div class="video-carousel-wrap">
     <div class="video-track-outer">
       <div class="video-track" id="videoTrack">
-        <div class="video-card">
+        <div class="video-card" data-video-url="https://www.youtube.com/embed/dgscTvOdlVs">
           <div class="video-thumb">
+            <img src="t1.jpg" alt="Gaming montage video thumbnail">
             <div class="video-play"><div class="play-tri"></div></div>
             <div class="video-duration">4:22</div>
           </div>
@@ -395,8 +406,9 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
             <div class="video-meta"><span>YouTube</span><span>Sample</span></div>
           </div>
         </div>
-        <div class="video-card">
-          <div class="video-thumb" style="background:#111">
+        <div class="video-card" data-video-url="">
+          <div class="video-thumb">
+            <img src="t1.jpg" alt="Instagram reel video thumbnail">
             <div class="video-play"><div class="play-tri"></div></div>
             <div class="video-duration">0:58</div>
           </div>
@@ -405,8 +417,9 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
             <div class="video-meta"><span>Reels</span><span>Sample</span></div>
           </div>
         </div>
-        <div class="video-card">
-          <div class="video-thumb" style="background:#0a0a1a">
+        <div class="video-card" data-video-url="">
+          <div class="video-thumb">
+            <img src="t1.jpg" alt="Cinematic travel video thumbnail">
             <div class="video-play"><div class="play-tri"></div></div>
             <div class="video-duration">2:14</div>
           </div>
@@ -415,8 +428,9 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
             <div class="video-meta"><span>YouTube</span><span>Sample</span></div>
           </div>
         </div>
-        <div class="video-card">
-          <div class="video-thumb" style="background:#140a1a">
+        <div class="video-card" data-video-url="">
+          <div class="video-thumb">
+            <img src="t1.jpg" alt="TikTok short video thumbnail">
             <div class="video-play"><div class="play-tri"></div></div>
             <div class="video-duration">1:05</div>
           </div>
@@ -425,8 +439,9 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
             <div class="video-meta"><span>TikTok</span><span>Sample</span></div>
           </div>
         </div>
-        <div class="video-card">
-          <div class="video-thumb" style="background:#0a150a">
+        <div class="video-card" data-video-url="">
+          <div class="video-thumb">
+            <img src="t1.jpg" alt="Vlog edit video thumbnail">
             <div class="video-play"><div class="play-tri"></div></div>
             <div class="video-duration">6:48</div>
           </div>
@@ -544,6 +559,11 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
       <button class="modal-close" onclick="closeModal('videoModal')">×</button>
     </div>
     <div class="modal-body">
+      <div class="modal-preview" id="videoPreview">Preview will appear here</div>
+      <div class="modal-input-group">
+        <label class="modal-label">Upload thumbnail</label>
+        <input type="file" accept="image/*" class="modal-input" id="videoFileInput" onchange="previewVideoImage(event)">
+      </div>
       <div class="modal-input-group">
         <label class="modal-label">YouTube / Vimeo embed URL</label>
         <input type="text" class="modal-input" id="videoUrl" placeholder="https://www.youtube.com/embed/...">
@@ -570,6 +590,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:24px 5%;d
 
 <script>
 let thumbImageData=null;
+let videoImageData=null;
 
 /* ── LIGHTBOX ── */
 function openLightbox(type, title, tag, imgSrc, videoUrl){
@@ -614,8 +635,8 @@ function attachVideoClicks(track){
       const title=card.querySelector('.video-title')?.textContent||'Video';
       const meta=card.querySelectorAll('.video-meta span');
       const tag=meta[0]?.textContent||'Video';
-      const fr=card.querySelector('iframe');
-      openLightbox('video',title,tag,null,fr?fr.src:null);
+      const videoUrl=card.dataset.videoUrl||null;
+      openLightbox('video',title,tag,null,videoUrl);
     };
   });
 }
@@ -666,8 +687,8 @@ window.addEventListener('load',()=>{
       const title=this.querySelector('.video-title')?.textContent||'Video';
       const meta=this.querySelectorAll('.video-meta span');
       const tag=meta[0]?.textContent||'Video';
-      const fr=this.querySelector('iframe');
-      openLightbox('video',title,tag,null,fr?fr.src:null);
+      const videoUrl=this.dataset.videoUrl||null;
+      openLightbox('video',title,tag,null,videoUrl);
     };
   });
 });
@@ -677,6 +698,7 @@ function openModal(t){document.getElementById(t==='thumb'?'thumbModal':'videoMod
 function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow=''}
 function closeModalOutside(e,id){if(e.target===e.currentTarget)closeModal(id)}
 function previewThumbImage(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{thumbImageData=ev.target.result;const p=document.getElementById('thumbPreview');p.innerHTML='<img src="'+ev.target.result+'">'};r.readAsDataURL(f)}
+function previewVideoImage(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{videoImageData=ev.target.result;const p=document.getElementById('videoPreview');p.innerHTML='<img src="'+ev.target.result+'">'};r.readAsDataURL(f)}
 function buildThumbCard(title,tag,imgData){
   const card=document.createElement('div');card.className='thumb-item';card.style.cursor='pointer';
   const img=imgData?'<img src="'+imgData+'" style="width:100%;height:100%;object-fit:cover;">':'';
@@ -693,6 +715,14 @@ function addThumbnail(){
   syncCarousel();
   document.getElementById('thumbTitle').value='';document.getElementById('thumbTag').value='';document.getElementById('thumbFileInput').value='';document.getElementById('thumbPreview').innerHTML='Preview will appear here';thumbImageData=null;closeModal('thumbModal');
 }
+function buildVideoCard(title,platform,dur,url,imgData){
+  const card=document.createElement('div');card.className='video-card';card.style.cursor='pointer';
+  card.dataset.videoUrl=url;
+  const img=imgData?'<img src="'+imgData+'" alt="'+title+' thumbnail">':'<img src="t1.jpg" alt="'+title+' thumbnail">';
+  card.innerHTML=`<div class="video-thumb">${img}<div class="video-play"><div class="play-tri"></div></div><div class="video-duration">${dur}</div></div><div class="video-info"><div class="video-title">${title}</div><div class="video-meta"><span>${platform}</span><span>Added</span></div></div>`;
+  card.onclick=()=>openLightbox('video',title,platform,null,url||null);
+  return card;
+}
 function addVideo(){
   const url=document.getElementById('videoUrl').value.trim();
   const title=document.getElementById('videoTitle').value.trim()||'Untitled Video';
@@ -700,13 +730,11 @@ function addVideo(){
   const dur=document.getElementById('videoDuration').value.trim()||'—';
   const track=document.getElementById('videoTrack');
   track.querySelectorAll('.video-clone').forEach(el=>el.remove());
-  const card=document.createElement('div');card.className='video-card';card.style.cursor='pointer';
-  const th=url?`<iframe src="${url}" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>`:`<div class="video-play"><div class="play-tri"></div></div><div class="video-duration">${dur}</div>`;
-  card.innerHTML=`<div class="video-thumb" style="background:#111">${th}</div><div class="video-info"><div class="video-title">${title}</div><div class="video-meta"><span>${platform}</span><span>Added</span></div></div>`;
-  card.onclick=()=>openLightbox('video',title,platform,null,url||null);
-  track.appendChild(card);
+  track.appendChild(buildVideoCard(title,platform,dur,url,videoImageData));
   syncVideoCarousel();
-  ['videoUrl','videoTitle','videoPlatform','videoDuration'].forEach(id=>document.getElementById(id).value='');
+  ['videoUrl','videoTitle','videoPlatform','videoDuration','videoFileInput'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('videoPreview').innerHTML='Preview will appear here';
+  videoImageData=null;
   closeModal('videoModal');
 }
 function handleContactSubmit(e){
